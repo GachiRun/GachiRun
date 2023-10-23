@@ -1,0 +1,15 @@
+쿼리문 작성할때 configuration.xml 에서 작성할려는 DTO가 있는지 확인한다.
+없다면 configuration.xml에서 하나 추가해두면 된다.
+<typeAliases>은 패키지에 대한 별명을 지정 할수 있어서 간편화 시키는데 사용됩니다.
+이후 해당 mapper를 작업은 resources/mapper에 만들어 작업하면 된다.
+
+인텔리제이는 스프링과 다른건지 혹은 현재 버전 업데이트로 인해 변경된것인지
+
+pom.xml이나 maven 형식의 xml이 존재하지 않으며 이를 해결하기 위해서는
+application.poperties에서 수정해야한다.
+
+mybatis.mapper-locations=classpath:mapper/*.xml
+mybatis.config-location=classpath:configuration.xml
+
+이처럼 mapper나 config의 위치를 지정 하여 프로그램 실행시 해당 xml을 읽게 해야한다.
+

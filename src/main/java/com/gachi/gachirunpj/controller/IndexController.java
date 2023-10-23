@@ -17,7 +17,7 @@ public class IndexController {
             model.addAttribute("message", "Hello" + principal.getName());
         }
 
-        return "index";
+        return "loginForm.html";
     }
 
     @GetMapping("/info")
@@ -37,4 +37,12 @@ public class IndexController {
         model.addAttribute("message", "Hello Admin, " + principal.getName());
         return "admin";
     }
+
+    //회원가입//
+    @GetMapping("/signUp")
+    public String signUp() {
+        System.out.println("signUp 이거 타는거 맞음?");
+        return "signUp.html";
+    }
+
 }

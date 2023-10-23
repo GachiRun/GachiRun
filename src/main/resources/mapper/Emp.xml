@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gachi.gachirunpj.">
+
+    <insert id="wsEmpInsert" parameterType="Emp">
+        insert into emp(Emp_num, emp_id, emp_passwd, emp_name, emp_nickname)
+        values (3, #{Emp_id}, #{Emp_passwd}, #{Emp_name}, #{Emp_Nickname});
+
+    </insert>
+
+    <select id="checkEmpId" parameterType="String" resultType="Emp">
+        select * from emp where emp_id = #{emp_id}
+    </select>
+
+</mapper>
