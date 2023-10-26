@@ -45,4 +45,18 @@ public class IndexController {
         return "signUp.html";
     }
 
+    //아이디, 비밀번호 찾기 뷰 출력
+    @GetMapping("/findIdPwForm")
+    public String findIdPwForm()
+    {
+        return "findIdPwForm.html";
+    }
+
+    //마이페이지
+    @GetMapping("/MyPage")
+    public String MyPage()
+    {
+        return "MyPage.html";
+    }
+
 }

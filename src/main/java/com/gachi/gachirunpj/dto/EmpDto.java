@@ -13,9 +13,13 @@ public class EmpDto {
     public String Emp_Edit_date;
     public String Emp_Email;
     public String Emp_birth;
-    public int    Emp_gender;
-    public int   Emp_phone;
+    public String Emp_gender;
+    public int    Emp_phone;
     public String Emp_Social;
     public int    Crew_Num;
     public int    State_Num;
+
+    //리뷰용
+    private String msg; //결과 메시지
+    private int result; //결과 상태창
 }
