@@ -1,0 +1,208 @@
+<!--해당 파일은 스프링 시큐리티 연동 관련해서 테스트 중입니다
+<!DOCTYPE html>
+
+<html>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+
+    var id_check = false;
+
+    //자동으로 도메인값을 넣어주는 함수
+    function changeDomain()
+    {
+        if($('#domain_list').val() == 'type')
+        {
+            $('#user_email2').val("");
+            $('#user_email2').attr("readonly", false);
+        }
+        else
+        {
+            $('#user_email2').val($('#domain_list').val());
+            $('#user_email2').attr("readonly", true);
+        }
+    }
+
+    //회원 가입 유효성 체크
+    function updateUpCheck()
+    {
+        var check = true;
+        var address = $('#postcode').val() + " " + $('#address').val() + " /" + $('#detailAddress').val();
+        var email = $('#user_email1').val() + "@" +  $('#user_email2').val()
+
+        $('#emp_address').attr('value', address);
+        $('#emp_email').attr('value', email);
+
+        if($('#emp_password').val() != $('#chk_emp_password').val())
+        {
+            alert('패스워드가 일치하지 않습니다. 다시 입력해주세요.');
+            check = false;
+        }
+
+        if($('#emp_password').val().length < 8)
+        {
+            alert('패스워드는 보안상의 이유로 8글자 이상 입력해주세요');
+            check = false;
+        }
+
+        if(check == false)
+        {
+            alert("체크 항목들을 확인해 주세요");
+            return false;
+        }
+    }
+
+
+
+    $(function()
+    {
+        //이메일 값 나누기
+        var email = '${emp.emp_email}';
+        var user_email = email.split('@');
+        var user_email1 = user_email[0];
+        var user_email2 = user_email[1];
+
+        $('#user_email1').attr('value', user_email1);
+        $('#user_email2').attr('value', user_email2);
+
+
+        if('${result}' == 1)
+        {
+            alert("회원 정보 변경에 성공했습니다.");
+        }
+        else if('${result}' == 2)
+        {
+            alert("회원 정보 변경에 실패했습니다.");
+        }
+
+    });
+</script>
+<head>
+    <style type="text/css">
+        .form-control {
+            display: inline;
+            width: 50%;
+            height: calc(1.5em + .75rem + 2px);
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #6e707e;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #d1d3e2;
+            border-radius: .35rem;
+            -webkit-transition: border-color .15s ease-in-out, -webkit-box-shadow
+            .15s ease-in-out;
+            transition: border-color .15s ease-in-out, -webkit-box-shadow .15s
+            ease-in-out;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out,
+            -webkit-box-shadow .15s ease-in-out
+        }
+
+        #postcode {
+            width: 300px;
+        }
+
+    </style>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+
+<div class="container-xxl flex-grow-1 container-p-y" style="width: 1600px;">
+    <h4 class="fw-bold py-3 mb-4">마이페이지</h4>
+    <div class="card mb-6">
+
+        <form action="/user/editInfo" method="post">
+            <div class="form-group textbox">
+                <label for="emp_name">이름</label>
+                <input type="text" class="form-control" id="emp_name" name ="emp_name" required="required" ></p>
+            </div>
+
+            <div class="form-group textbox">
+                <label for="emp_id">아이디</label>
+                <input type="text" class="form-control" id="emp_id" name ="emp_id" required="required" ></p>
+                <input type="button" class="btn btn-primary" onclick="idCheck()" value="아이디 중복 확인"> <p id="idCheckMsg"></p>
+            </div>
+
+            <div class="form-group textbox">
+                <label for="emp_passwd">비밀번호</label>
+                <input type="password" class="form-control" id="emp_passwd" name="emp_passwd" required="required" ></p>
+            </div>
+
+            <div class="form-group textbox">
+                <label for="chk_emp_passwd">비밀번호 확인</label>
+                <input type="password" class="form-control" id="chk_emp_passwd" name="chk_emp_passwd" required="required" ></p>
+            </div>
+
+            <div class="form-group textbox">
+                <label for="emp_nickname">닉네임</label>
+                <input type="text" class="form-control" id="emp_nickname" name ="emp_nickname" required="required" ></p>
+            </div>
+
+            <div class="form-group textbox">
+                <table>
+                    <tr>
+                        <th><label>이메일</label><br><sub>* 필수항목</sub></th>
+                        <td><input type="text" class="form-control" name="user_email1" id="user_email1" required="required" style="width: auto; display: inline;"> @ <input type="text" class="form-control" name="user_email2" id="user_email2" required="required" style="width: auto; display: inline;">
+                            <select name="email" class="form-select" id="domain_list" onclick="changeDomain()" >
+                                <option value="naver.com">naver.com</option>
+                                <option value="daum.net">daum.net</option>
+                                <option value="gmail.com">gmail.com</option>
+                                <option value="type" selected="selected">직접 입력</option>
+                            </select></p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <label for="emp_birth">생일</label>
+
+                <input type="date" id="emp_birth" name="emp_birth" max="2099-12-31" min="1900-01-01" value="2000-01-01">
+
+            </div>
+
+            <div class="form-group textbox">
+                <label>성별</label>
+                남자 <input type="radio" name="emp_gender" value="남자" checked="checked">
+                여자 <input type="radio" name="emp_gender" value="여자" >
+            </div>
+
+            <div class="form-group textbox">
+                <label >전화번호
+                    <select type="text" class="form-control" id="emp_phone1" name="emp_phone1" required="required">
+                        <option value="">선택하세요</option>
+                        <option value="010">010</option>
+                        <option value="02">02</option>
+                        <option value="031">031</option>
+                        <option value="032">032</option>
+                        <option value="033">033</option>
+                        <option value="041">041</option>
+                        <option value="042">042</option>
+                        <option value="043">043</option>
+                        <option value="051">051</option>
+                        <option value="052">052</option>
+                        <option value="053">053</option>
+                        <option value="061">061</option>
+                        <option value="062">062</option>
+                        <option value="063">063</option>
+                    </select>
+                    -<input type="text" class="form-control" id="emp_phone2" name ="emp_phone2" required="required" ></p>
+                    -<input type="text" class="form-control" id="emp_phone3" name ="emp_phone3" required="required" ></p>
+
+                </label>
+
+            </div>
+            <div class="form-group textbox">
+                &lt;!&ndash; 임시 틀 &ndash;&gt;
+                <input type="hidden" id="emp_phone" name = "emp_phone"> <p/>
+                <input type="hidden" id="emp_email" name = "emp_email"> <p/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+-->
