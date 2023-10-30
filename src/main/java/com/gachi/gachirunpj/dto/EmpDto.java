@@ -19,7 +19,9 @@ public class EmpDto {
     public int    Crew_Num;
     public int    State_Num;
 
-    //리뷰용
+    //조회용
     private String msg; //결과 메시지
     private int result; //결과 상태창
+    private int State_num;		//권한 번호
+    private String State_name;	//권한 이름
 }

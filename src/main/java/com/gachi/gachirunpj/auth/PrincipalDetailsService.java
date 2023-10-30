@@ -1,4 +1,4 @@
-/* 해당 파일은 스프링 시큐리티 연동 관련해서 테스트 중입니다
+
 package com.gachi.gachirunpj.auth;
 
 import com.gachi.gachirunpj.dto.EmpDto;
@@ -9,10 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.oracle.munguFactory.dto.EmpDTO;
-import com.oracle.munguFactory.dto.SecurityUserDTO;
-import com.oracle.munguFactory.kws.service.EmpService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,22 +27,19 @@ public class PrincipalDetailsService implements UserDetailsService {
 	
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, UsernameNotFoundException  {
 		// TODO Auto-generated method stub
-		System.out.println("PrincipalDetailsService username : " + username);
 		EmpDto emp = empService.login(username);
 		
 		if(emp == null) {
-			System.out.println("null");
 			return null;
 		}
 		else{
-			System.out.println("else");
-			SecurityUserDTO securityUser = new SecurityUserDTO(emp.getEmp_id(), emp.getEmp_passwd(),"ROLE_"+emp.getAuth_name());
+			SecurityUserDTO securityUser = new SecurityUserDTO(emp.getEmp_id(), emp.getEmp_passwd(),"ROLE_"+emp.getState_name());
 			
 			return new PrincipalDetails(securityUser, emp);
 		}
 	}
 
 }
-*/
+

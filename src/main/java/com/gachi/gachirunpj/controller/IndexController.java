@@ -1,12 +1,17 @@
 package com.gachi.gachirunpj.controller;
 
+import com.gachi.gachirunpj.auth.PrincipalDetails;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
 @Controller
+@RequestMapping
 public class IndexController {
 
     @GetMapping("/")
@@ -41,7 +46,6 @@ public class IndexController {
     //회원가입//
     @GetMapping("/signUp")
     public String signUp() {
-        System.out.println("signUp 이거 타는거 맞음?");
         return "signUp.html";
     }
 
@@ -52,11 +56,24 @@ public class IndexController {
         return "findIdPwForm.html";
     }
 
-    //마이페이지
-    @GetMapping("/MyPage")
-    public String MyPage()
-    {
-        return "MyPage.html";
+    @GetMapping("/loginSuccess")
+    public String login(@AuthenticationPrincipal PrincipalDetails principal, HttpSession session,Model model) {
+        session.setAttribute("EmpDto", principal.getEmpDto()); // 세션 적용
+       model.addAttribute("EmpDto", principal.getEmpDto());
+        return "/Main";
     }
+
+    @RequestMapping("/login")
+    public String login(Model model) {
+        return "loginForm.html";
+    }
+
+    @RequestMapping("/loginFail")
+    public String loginFail(Model model) {
+        model.addAttribute("msg","로그인에 실패하셨습니다.");
+        return "loginForm.html";
+    }
+
+
 
 }

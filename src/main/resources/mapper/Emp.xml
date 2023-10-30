@@ -5,8 +5,8 @@
 <mapper namespace="com.gachi.gachirunpj.">
 
     <insert id="wsEmpInsert" parameterType="Emp">
-        insert into emp(Emp_num, emp_id, emp_passwd, emp_name, emp_nickname, Emp_Hire_Date , Emp_Edit_date , Emp_Email , Emp_birth , Emp_gender  , Emp_phone, Emp_Social)
-        values ((nextval('TEST_SEQ') ), #{Emp_id}, #{Emp_passwd}, #{Emp_name}, #{Emp_Nickname},  sysdate(), sysdate(), #{Emp_Email}, #{Emp_birth}, #{Emp_gender}, #{Emp_phone}, '소셜');
+        insert into emp(Emp_num, emp_id, emp_passwd, emp_name, emp_nickname, Emp_Hire_Date , Emp_Edit_date , Emp_Email , Emp_birth , Emp_gender  , Emp_phone, Emp_Social, State_num)
+        values ((nextval('TEST_SEQ') ), #{Emp_id}, #{Emp_passwd}, #{Emp_name}, #{Emp_Nickname},  sysdate(), sysdate(), #{Emp_Email}, #{Emp_birth}, #{Emp_gender}, #{Emp_phone}, '소셜', 1);
     </insert>
 
     <select id="checkEmpId" parameterType="String" resultType="Emp">
@@ -31,8 +31,8 @@
 
     <select id="chkLogin" parameterType="String" resultType="Emp">
         select *
-        from emp e, authority a , dept d , posit p
-        where e.auth_no = a.auth_no and e.dept_no = d.dept_no and e.posit_no = p.posit_no  and e.emp_id = #{emp_id}
+        from emp e, user_state s
+        where e.State_num = s.State_num  and e.Emp_id = #{username}
     </select>
 
 </mapper>

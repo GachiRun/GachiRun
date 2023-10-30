@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="menu-inner-shadow"></div>
+
+<ul class="menu-inner py-1">
+        <!-- Dashboard -->
+        <li class="menu-item active">
+            <a href="${pageContext.request.contextPath }/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">메인</div>
+            </a>
+        </li>
+        <li class="login-stat">
+            <a href="/user/MyPage" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                님 안녕하세요 !
+            </a>
+        </li>
+        <li class="login-stat">
+
+                <a href="/logout" class="menu-link">
+                    <i class='menu-icon tf-icons bx bx-log-out' ></i>
+                    <div data-i18n="Account">로그아웃</div>
+                </a>
+
+        </li>
+
+
+    <div class="forMargin"></div>
+</body>
+</html>

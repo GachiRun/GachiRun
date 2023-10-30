@@ -1,4 +1,4 @@
-/*해당 파일은 스프링 시큐리티 연동 관련해서 테스트 중입니다
+
 package com.gachi.gachirunpj.dto;
 
 
@@ -24,4 +24,4 @@ public class SecurityUserDTO{
 		this.role = role;
 	}
 }
-*/
+
