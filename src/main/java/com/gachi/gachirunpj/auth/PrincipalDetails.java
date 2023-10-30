@@ -1,4 +1,3 @@
-/*해당 파일은 스프링 시큐리티 연동 관련해서 테스트 중입니다
 package com.gachi.gachirunpj.auth;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class PrincipalDetails implements UserDetails {
 	public PrincipalDetails(SecurityUserDTO securityUser, EmpDto empDto) {
 		this.securityUser = securityUser;
 		this.empDto = empDto;
-		System.out.println("PrincipalDetails 생성자 securityUser->" + securityUser);
 	}
 	
 	@Override
@@ -35,7 +33,6 @@ public class PrincipalDetails implements UserDetails {
 			
 			@Override
 			public String getAuthority() {
-				System.out.println("getAuthorities GrantedAuthority user.getRole()->" + securityUser.getRole());
 				return securityUser.getRole();
 			}
 		});
@@ -79,4 +76,4 @@ public class PrincipalDetails implements UserDetails {
 	}
 
 }
-*/
+

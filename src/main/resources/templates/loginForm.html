@@ -29,20 +29,19 @@
             }
 
             $.ajax({
-                url : "<%=context%>/login",
+                url : "/login",
                 type : 'post',
                 data : {
                     emp_id : v_emp_id,
                     emp_passwd : v_emp_passwd
                 },
-
                 success:function(data)
                 {
                     if(data.result == 1)
                     {
                         console.log(JSON.stringify(data));
                         alert(data.msg);
-                        location.href='<%=context%>/auth_finder';
+                        location.href='/auth_finder';
                     }
                     else
                     {
@@ -132,7 +131,7 @@
                         <hr>
                         <a href="/findIdPwForm" class="btn btn-google btn-user btn-block">아이디 / 비밀번호 찾기</a>
                         <a href="/signUp" class="btn btn-facebook btn-user btn-block">회원 가입</a>
-                        <a href="/MyPage" class="btn btn-facebook btn-user btn-block">테스트 마이페이지</a>
+                        <a href="/MyPageForm" class="btn btn-facebook btn-user btn-block">테스트 마이페이지</a>
                         <hr>
                     </div>
                 </div>

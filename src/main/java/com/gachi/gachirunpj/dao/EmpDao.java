@@ -13,5 +13,5 @@ public interface EmpDao {
 
     int changePw(String empPasswd, int empNum);
 
-    EmpDto login(String empId);
+    EmpDto login(String username);
 }

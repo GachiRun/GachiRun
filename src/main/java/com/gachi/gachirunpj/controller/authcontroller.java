@@ -1,8 +1,12 @@
 package com.gachi.gachirunpj.controller;
 
+import com.gachi.gachirunpj.auth.PrincipalDetails;
 import com.gachi.gachirunpj.dto.EmpDto;
 import com.gachi.gachirunpj.service.EmpService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class authcontroller {
         //전체 유저의 Controller
         private final EmpService empService;
@@ -31,27 +36,15 @@ public class authcontroller {
         System.out.println("EmpService login Start");
         EmpDto emp = new EmpDto();
         EmpDto chkEmp = new EmpDto();
-        System.out.println("Parameter Test 1 email : "+emp_email);
-        System.out.println("Parameter Test 2 Name : "+emp_name);
-        System.out.println("Parameter Test 3 phone : "+emp_phone);
         chkEmp.setEmp_Email(emp_email);
         chkEmp.setEmp_name(emp_name);
         chkEmp.setEmp_phone(emp_phone);
-        System.out.println("Parameter Test 1 email : "+chkEmp.getEmp_Email());
-        System.out.println("Parameter Test 2 Name : "+chkEmp.getEmp_name());
-        System.out.println("Parameter Test 3 phone : "+chkEmp.getEmp_phone());
         try {
             emp = empService.getInfo(chkEmp); //찾기를 원하는 아이디의 사번을 가져온다.
-            System.out.println("쿼리문 실행 후 ");
-            System.out.println("emp Parameter Test 1 email : "+ emp.getEmp_Email());
-            System.out.println("emp Parameter Test 2 Name : "+ emp.getEmp_name());
-            System.out.println("emp Parameter Test 3 phone : "+ emp.getEmp_phone());
 
             //찾으려는 사번에 해당하는 유저의 이름과 이메일 일치한 경우
             if(emp_name.equals(emp.getEmp_name())&& emp_email.equals(emp.getEmp_Email()) && emp_phone == emp.getEmp_phone())
             {
-                System.out.println("정보가 모두 일치 되었습니다.");
-                System.out.println("당신의 아이디는 " + emp.getEmp_id() + " 입니다.");
                 emp.setMsg(emp.getEmp_name()+"의 아이디는 "+emp.getEmp_id()+" 입니다."); //결과 메시지에 저장한다.
                 emp.setResult(1); //결과 값을 저장한다.
             } else {
@@ -69,13 +62,8 @@ public class authcontroller {
     @RequestMapping("/findPw")
     public EmpDto findPw( @RequestParam String emp_name, @RequestParam String emp_id, @RequestParam String emp_email,  @RequestParam int emp_phone)
     {
-        System.out.println("EmpService login Start");
         EmpDto emp = new EmpDto();
         EmpDto chkEmp = new EmpDto();
-        System.out.println("Parameter Test 1 email : "+emp_email);
-        System.out.println("Parameter Test 2 Name : "+emp_name);
-        System.out.println("Parameter Test 3 phone : "+emp_phone);
-        System.out.println("Parameter Test 4 id : "+emp_id);
 
         chkEmp.setEmp_Email(emp_email);
         chkEmp.setEmp_name(emp_name);
@@ -89,8 +77,6 @@ public class authcontroller {
             // 이름 & 이메일 & 아이디를 찾아온 유저 정보와 일치한 경우
             if(emp_name.equals(emp.getEmp_name()) && emp_id.equals(emp.getEmp_id())&& emp_email.equals(emp.getEmp_Email()) && emp_phone == emp.getEmp_phone() )
             {
-                System.out.println("정보가 모두 일치 되었습니다.");
-                System.out.println("당신의 아이디는 " + emp.getEmp_id() + " 입니다.");
                 emp.setMsg("비밀 번호를 수정합니다. <br><h5>비밀 번호를 입력해주세요</h5></br>"); //결과 메시지를 저장한다.
                 emp.setResult(1); //결과 값을 저장한다.
             }
@@ -111,16 +97,11 @@ public class authcontroller {
     public int changePw(@RequestParam String emp_password, @RequestParam int emp_num)
     {
         int result = 0;
-        System.out.println("EmpService changePw Start");
-
-        System.out.println("emp_num : "+ emp_num);
-        System.out.println("emp_passwd : "+emp_password);
 
         EmpDto emp = new EmpDto();
         try {
             emp = empService.getInfoNum(emp_num); //해당 정보 가져오기
             emp.setResult(1);
-            System.out.println("암호화된 비밀번호: "+encoder.encode(emp_password));
             emp.setEmp_passwd(encoder.encode(emp_password)); //새로 입력값으로 받아온 비밀번호 암호화
             result = empService.changePw(emp.getEmp_passwd(),emp_num); //비밀번호 변동에 대한 결과값 저장
 
@@ -136,8 +117,6 @@ public class authcontroller {
     ///////회원가입///////
     @PostMapping("/empSignUp")
     public String empSignUp(EmpDto emp, @RequestParam String emp_name, @RequestParam String emp_id, @RequestParam String emp_passwd, @RequestParam String emp_nickname, @RequestParam String emp_email, @RequestParam String emp_birth, @RequestParam String emp_gender,@RequestParam int emp_phone ){
-        System.out.println("EmpController empSignUp Start");
-        System.out.println("EmpController EnCrypt Start");
 
         String securePasswd = encoder.encode(emp.getEmp_passwd()); //비밀 번호 암호화 작업
         emp.setEmp_passwd(securePasswd);
@@ -145,17 +124,6 @@ public class authcontroller {
         emp.setEmp_name(emp_name);
         emp.setEmp_Nickname(emp_nickname);
         emp.setEmp_Email(emp_email);
-
-        System.out.println("암호화된 비밀번호: "+securePasswd);
-        System.out.println("아이디: "+emp_id);
-        System.out.println("이름: "+emp_name);
-        System.out.println("닉네임: "+emp_nickname);
-        System.out.println("메일: "+emp_email);
-        System.out.println("생일: "+emp_birth);
-        System.out.println("성별: "+emp_gender);
-        System.out.println("전화번호: "+emp_phone);
-
-        System.out.println("EmpController empSave Start...");
         int result = empService.empSignUp(emp);
 
         if (result>0) //저장이 성공한 경우
@@ -173,7 +141,6 @@ public class authcontroller {
     @ResponseBody
     @PostMapping("/checkEmpId")
     public int checkEmpId(String emp_id) {
-        System.out.println("empController checkEmpId Start");
         int result = empService.checkEmpId(emp_id);
         String check = "";
 
@@ -191,4 +158,61 @@ public class authcontroller {
 
         return result;
     }
+
+
+    ////////////////////////////로그인 성공여부/////////////////////
+    //로그인 메소드 [수정]
+//		@ResponseBody
+
+
+
+
+    //관리자이니 일반 유저인지 확인하기 위한 메소드
+/*    @GetMapping("/auth_finder")
+    public String auth_finder(HttpSession session,Model model)
+    {
+        Emp emp = (Emp) session.getAttribute("emp"); //"로그인시" 세션을 설정해 놓은 값을 가져온다.
+
+        EmpForSearch empForSearch = (EmpForSearch) session.getAttribute("empForSearch"); //JPA 외래키를 설정해 놓은 값을 받아오기 위해서 조회용 객체에 저장한 세션값을 가져온다.
+
+        System.out.println(emp.getEmp_name()+"님은 "+empForSearch.getAuth_name()+" 입니다");
+
+        //관리자 일 경우
+        if(empForSearch.getAuth_num() == 0)
+        {
+            model.addAttribute("emp",emp);
+            model.addAttribute("empForSearch",empForSearch);
+            return "/main/user/Main";
+        }
+        //일반 유저 일 경우
+        else
+        {
+            model.addAttribute("emp",emp);
+            model.addAttribute("empForSearch",empForSearch);
+            return "/main/user/Main";
+        }
+    }*/
+
+    //로그아웃
+    @RequestMapping("/logoutForm")
+    public String logout(@AuthenticationPrincipal PrincipalDetails principal, HttpSession session)
+    {
+        System.out.println("session" + session);
+        session.invalidate();
+        return "emp/logoutForm";
+    }
+
+    //마이페이지
+    @RequestMapping("/MyPage")
+    public String myPageForm(@AuthenticationPrincipal PrincipalDetails principal, HttpSession session,Model model)
+    {
+        session.setAttribute("emp", principal.getEmpDto()); // 세션 적용
+        model.addAttribute("emp", principal.getEmpDto());//원래는 위 세션으로 넘기는데 안넘어가지길래 만든 테스트 model
+
+        return "user/MyPage";
+    }
+
+
+
+
 }
